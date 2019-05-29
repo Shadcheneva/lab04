@@ -120,15 +120,85 @@ $ edit REPORT.md
 $ gistup -m "lab${LAB_NUMBER}"
 ```
 
-## Homework
+## TravisCI:
 
-Вы продолжаете проходить стажировку в "Formatter Inc." (см [подробности](https://github.com/tp-labs/lab03#Homework)).
+```
+notifications:
+  email: false
 
-В прошлый раз ваше задание заключалось в настройке автоматизированной системы **CMake**.
+language: cpp
 
-Сейчас вам требуется настроить систему непрерывной интеграции для библиотек и приложений, с которыми вы работали в [прошлый раз](https://github.com/tp-labs/lab03#Homework). Настройте сборочные процедуры на различных платформах:
-* используйте [TravisCI](https://travis-ci.com/) для сборки на операционной системе **Linux** с использованием компиляторов **gcc** и **clang**;
-* используйте [AppVeyor](https://www.appveyor.com/) для сборки на операционной системе **Windows**.
+os:
+  - linux
+
+# интегрировать на двух разных компиляторах
+compiler:
+  - gcc
+  - clang
+
+# Using SOFT
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-precise-3.6
+    packages:
+      - g++-7
+      - clang-3.6
+
+# Target scripts
+script:
+  - cmake CMakeLists.txt
+  - cmake --build .
+Решение для AppVeyor:
+image: Visual Studio 2017
+
+
+# Bыбраны две архитектуры для большего покрытия возможных ошибок
+platform:
+  - x64
+  - x86
+
+# Release mode
+configuration:
+  - Release
+
+# Собираем на Microsoft Visual Studio 2017
+environment:
+  matrix:
+    - TOOLCHAIN: msvc17
+
+# Target scripts
+build_script:
+  - cmake CMakeLists.txt
+  - cmake --build .
+  ```
+  
+## Решение для AppVeyor:
+
+```
+image: Visual Studio 2017
+
+
+# Bыбраны две архитектуры для большего покрытия возможных ошибок
+platform:
+  - x64
+  - x86
+
+# Release mode
+configuration:
+  - Release
+
+# Собираем на Microsoft Visual Studio 2017
+environment:
+  matrix:
+    - TOOLCHAIN: msvc17
+
+# Target scripts
+build_script:
+  - cmake CMakeLists.txt
+  - cmake --build .
+  ```
 
 ## Links
 
